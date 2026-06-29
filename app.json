@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "klare-mobile",
-    "slug": "klare-mobile",
+    "slug": "klare",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -30,19 +30,36 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/klare-logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#0F6E56",
           "dark": {
-            "backgroundColor": "#000000"
+            "image": "./assets/images/klare-logo.png",
+            "imageWidth": 200,
+            "backgroundColor": "#0F6E56"
           }
+        }
+      ],
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "color": "#0F6E56"
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "27cba6c0-de16-4b7e-9c4b-5497aca172c1"
+      }
+    },
+    "owner": "joeboy77"
   }
 }
