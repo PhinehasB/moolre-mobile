@@ -15,7 +15,7 @@ import {
 import { Colors, Fonts } from '@/constants/theme';
 import { ApiError, BillItem, BillPaymentResult, PendingSalary, personalApi } from '@/lib/api';
 import { categoryIcon } from '@/lib/categories';
-import { money, moneyWhole } from '@/lib/format';
+import { money } from '@/lib/format';
 
 type Props = {
   salary: PendingSalary;
@@ -155,7 +155,7 @@ export function SalaryReceivedModal({ salary, token, onClose }: Props) {
               <Text style={styles.subtitle}>
                 Klare paid {result.paidCount} {result.paidCount === 1 ? 'bill' : 'bills'} for you
                 {result.skippedCount > 0 ? ` · ${result.skippedCount} skipped` : ''}. You have {result.currency}{' '}
-                {moneyWhole(result.freeBalance)} free to spend.
+                {money(result.freeBalance)} free to spend.
               </Text>
               <Pressable style={styles.primary} onPress={onClose}>
                 <Text style={styles.primaryText}>Done</Text>
@@ -211,7 +211,7 @@ export function SalaryReceivedModal({ salary, token, onClose }: Props) {
                           <View style={styles.amountField}>
                             <Text style={styles.currencyPrefix}>{salary.currency}</Text>
                             <TextInput
-                              value={draft ?? moneyWhole(bill.amount)}
+                              value={draft ?? money(bill.amount)}
                               editable={bill.active && savingId !== bill.id}
                               onChangeText={(text) => setDrafts((c) => ({ ...c, [bill.id]: text }))}
                               onBlur={() => commitAmount(bill)}
@@ -239,7 +239,7 @@ export function SalaryReceivedModal({ salary, token, onClose }: Props) {
                     {activeBills.length} active {activeBills.length === 1 ? 'bill' : 'bills'}
                   </Text>
                   <Text style={styles.totalValue}>
-                    {salary.currency} {moneyWhole(activeTotal)}
+                    {salary.currency} {money(activeTotal)}
                   </Text>
                 </View>
               ) : null}

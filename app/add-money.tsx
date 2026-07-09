@@ -16,7 +16,7 @@ import { TextField } from '@/components/TextField';
 import { Colors, Fonts } from '@/constants/theme';
 import { ApiError, FundingResult, personalApi } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
-import { money, moneyWhole } from '@/lib/format';
+import { money } from '@/lib/format';
 
 type Stage = 'form' | 'otp' | 'pending' | 'done' | 'failed';
 
@@ -146,7 +146,7 @@ export default function AddMoneyScreen() {
               </View>
               <Text style={styles.statusTitle}>Wallet topped up</Text>
               <Text style={styles.statusBody}>
-                GHS {moneyWhole(parsedAmount)} has been added to your free spendable cash.
+                GHS {money(parsedAmount)} has been added to your free spendable cash.
               </Text>
               <Pressable style={styles.button} onPress={() => router.back()}>
                 <Text style={styles.buttonText}>Done</Text>
@@ -177,7 +177,7 @@ export default function AddMoneyScreen() {
               <ActivityIndicator color={Colors.brandGreen} size="large" />
               <Text style={styles.statusTitle}>Approve on your phone</Text>
               <Text style={styles.statusBody}>
-                {message ?? `We sent a prompt to ${payer.trim()}. Enter your mobile money PIN to approve GHS ${moneyWhole(
+                {message ?? `We sent a prompt to ${payer.trim()}. Enter your mobile money PIN to approve GHS ${money(
                   parsedAmount,
                 )}.`}
               </Text>

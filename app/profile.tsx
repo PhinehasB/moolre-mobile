@@ -13,6 +13,7 @@ export default function ProfileScreen() {
   const [signingOut, setSigningOut] = useState(false);
 
   const isEmployee = account?.accountType === 'EMPLOYEE';
+  const linked = account?.linkedToCompany ?? false;
   const initials = account
     ? `${account.firstName[0] ?? ''}${account.lastName[0] ?? ''}`.toUpperCase()
     : '';
@@ -51,23 +52,29 @@ export default function ProfileScreen() {
           <Text style={styles.name}>{fullName}</Text>
           <View style={styles.chip}>
             <Ionicons
-              name={isEmployee ? 'briefcase-outline' : 'person-outline'}
+              name={linked ? 'briefcase-outline' : 'person-outline'}
               size={13}
               color={Colors.brandGreen}
             />
             <Text style={styles.chipText}>
-              {isEmployee ? `Employee · ${account?.companyName ?? ''}` : 'Personal account'}
+              {linked ? `Employee · ${account?.companyName ?? ''}` : 'Personal account'}
             </Text>
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Account details</Text>
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, styles.sectionTitleInline]}>Account details</Text>
+          <Pressable hitSlop={8} onPress={() => router.push('/edit-profile')} style={styles.editBtn}>
+            <Ionicons name="create-outline" size={16} color={Colors.brandGreen} />
+            <Text style={styles.editText}>Edit</Text>
+          </Pressable>
+        </View>
         <View style={styles.card}>
           {isEmployee ? <Row label="Username" value={account?.username ?? '—'} /> : null}
           <Row label="Email" value={account?.email ?? '—'} />
           <Row label="Phone" value={account?.phone ?? '—'} />
-          {isEmployee ? <Row label="Role" value={account?.role ?? '—'} /> : null}
-          <Row label="Status" value={prettyStatus(account?.status)} last />
+          {linked ? <Row label="Role" value={account?.role ?? '—'} /> : null}
+          <Row label="Status" value={linked ? prettyStatus(account?.status) : 'Personal'} last />
         </View>
 
         <Text style={styles.sectionTitle}>Support</Text>
@@ -152,6 +159,16 @@ const styles = StyleSheet.create({
   },
   chipText: { fontFamily: Fonts.bodyMedium, fontSize: 12.5, color: Colors.brandGreen },
   sectionTitle: { fontFamily: Fonts.bodySemiBold, fontSize: 14, color: Colors.muted, marginTop: 26, marginBottom: 10 },
+  sectionTitleInline: { marginTop: 0, marginBottom: 0 },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 26,
+    marginBottom: 10,
+  },
+  editBtn: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  editText: { fontFamily: Fonts.bodySemiBold, fontSize: 13, color: Colors.brandGreen },
   card: {
     backgroundColor: Colors.white,
     borderRadius: 14,

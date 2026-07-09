@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Fonts } from '@/constants/theme';
 import { ActivityItem, ApiError, personalApi } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
-import { moneyWhole } from '@/lib/format';
+import { money } from '@/lib/format';
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -136,7 +136,7 @@ function Row({ item }: { item: ActivityItem }) {
         {item.subtitle ? <Text style={styles.rowSub}>{item.subtitle}</Text> : null}
       </View>
       <Text style={styles.amount}>
-        {sign}GHS {moneyWhole(item.amount)}
+        {sign}GHS {money(item.amount)}
       </Text>
     </View>
   );

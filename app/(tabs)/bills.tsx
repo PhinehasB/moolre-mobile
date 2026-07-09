@@ -16,7 +16,7 @@ import { Colors, Fonts } from '@/constants/theme';
 import { ApiError, BillItem, BillsData, BillPaymentResult, personalApi } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
 import { categoryIcon } from '@/lib/categories';
-import { moneyWhole } from '@/lib/format';
+import { money } from '@/lib/format';
 
 export default function BillsScreen() {
   const router = useRouter();
@@ -115,7 +115,7 @@ export default function BillsScreen() {
       } else {
         Alert.alert(
           'Bills paid',
-          `Klare paid ${result.paidCount} ${result.paidCount === 1 ? 'bill' : 'bills'} (${result.currency} ${moneyWhole(
+          `Klare paid ${result.paidCount} ${result.paidCount === 1 ? 'bill' : 'bills'} (${result.currency} ${money(
             result.totalPaid,
           )})${result.skippedCount > 0 ? `, ${result.skippedCount} skipped` : ''}.`,
         );
@@ -157,14 +157,14 @@ export default function BillsScreen() {
                 <View>
                   <Text style={styles.splitLabel}>{income != null ? 'Monthly income' : 'Locked for bills'}</Text>
                   <Text style={styles.splitValue}>
-                    {data.currency} {moneyWhole(income != null ? income : data.lockedForBills)}
+                    {data.currency} {money(income != null ? income : data.lockedForBills)}
                   </Text>
                 </View>
                 {income != null ? (
                   <View style={styles.splitRight}>
                     <Text style={styles.splitLabel}>Locked for bills</Text>
                     <Text style={[styles.splitValue, styles.splitValueLocked]}>
-                      {data.currency} {moneyWhole(data.lockedForBills)}
+                      {data.currency} {money(data.lockedForBills)}
                     </Text>
                   </View>
                 ) : null}
@@ -178,11 +178,11 @@ export default function BillsScreen() {
               {income != null && data.sweepPercentage != null ? (
                 <Text style={styles.splitCaption}>
                   {data.sweepPercentage}% of your salary is auto-swept to bills · {data.currency}{' '}
-                  {moneyWhole(spendable ?? 0)} stays spendable
+                  {money(spendable ?? 0)} stays spendable
                 </Text>
               ) : (
                 <Text style={styles.splitCaption}>
-                  {data.currency} {moneyWhole(data.lockedForBills)} is set aside and locked each payday.
+                  {data.currency} {money(data.lockedForBills)} is set aside and locked each payday.
                 </Text>
               )}
             </View>
@@ -257,7 +257,7 @@ function BillRow({
           </Text>
           <View style={styles.amountField}>
             <Text style={[styles.billAmount, !bill.active && styles.billAmountOff]}>
-              {currency} {moneyWhole(bill.amount)}
+              {currency} {money(bill.amount)}
             </Text>
             {saving ? <ActivityIndicator size="small" color={Colors.brandGreen} style={styles.rowSpinner} /> : null}
           </View>

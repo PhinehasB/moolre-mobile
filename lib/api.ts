@@ -18,8 +18,17 @@ export type Account = {
   phone?: string | null;
   role?: string | null;
   companyName?: string | null;
+  linkedToCompany: boolean;
   status: string;
   mustChangePassword: boolean;
+};
+
+export type UpdateProfilePayload = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  username?: string;
 };
 
 export type Session = {
@@ -126,6 +135,16 @@ export type TransferResult = {
   createdAt: string;
 };
 
+export type TransferInitiation = {
+  reference: string;
+  status: string;
+  phoneLast4: string | null;
+  amount: number;
+  klareFee: number;
+  total: number;
+  currency: string;
+};
+
 export type UpdateBillPayload = {
   name?: string;
   amount?: number;
@@ -206,7 +225,8 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     if (response.status === 401 && options.token && unauthorizedHandler) {
       unauthorizedHandler();
     }
-    const message = payload?.error?.message ?? 'Something went wrong. Please try again.';
+    const violation = payload?.error?.violations?.[0]?.message as string | undefined;
+    const message = violation ?? payload?.error?.message ?? 'Something went wrong. Please try again.';
     const code = payload?.error?.code ?? 'UNKNOWN';
     throw new ApiError(message, code, response.status);
   }
@@ -235,6 +255,9 @@ export const authApi = {
   },
   me(token: string) {
     return request<Account>('/api/v1/personal/auth/me', { token });
+  },
+  updateProfile(payload: UpdateProfilePayload, token: string) {
+    return request<Account>('/api/v1/personal/auth/me', { method: 'PATCH', body: payload, token });
   },
   logout(refreshToken: string) {
     return request<null>('/api/v1/personal/auth/logout', {
@@ -276,8 +299,15 @@ export const personalApi = {
   fundingStatus(externalRef: string, token: string) {
     return request<FundingResult>(`/api/v1/personal/wallet/fund/${externalRef}/status`, { token });
   },
-  transfer(payload: TransferPayload, token: string) {
-    return request<TransferResult>('/api/v1/personal/transfers', { method: 'POST', body: payload, token });
+  initiateTransfer(payload: TransferPayload, token: string) {
+    return request<TransferInitiation>('/api/v1/personal/transfers', { method: 'POST', body: payload, token });
+  },
+  confirmTransfer(reference: string, code: string, token: string) {
+    return request<TransferResult>(`/api/v1/personal/transfers/${reference}/confirm`, {
+      method: 'POST',
+      body: { code },
+      token,
+    });
   },
   pendingSalary(token: string) {
     return request<PendingSalary | null>('/api/v1/personal/salary/pending', { token });

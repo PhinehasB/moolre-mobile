@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { authApi, Session, setUnauthorizedHandler, SignupPayload } from './api';
+import { Account, authApi, Session, setUnauthorizedHandler, SignupPayload, UpdateProfilePayload } from './api';
 import { clearSession, loadSession, saveSession } from './storage';
 
 type AuthState = {
@@ -8,6 +8,7 @@ type AuthState = {
   signIn: (username: string, password: string, rememberMe: boolean) => Promise<Session>;
   signUp: (payload: SignupPayload) => Promise<Session>;
   activate: (newPassword: string, confirmPassword: string) => Promise<Session>;
+  updateProfile: (payload: UpdateProfilePayload) => Promise<Account>;
   signOut: () => Promise<void>;
 };
 
@@ -59,6 +60,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [session],
   );
 
+  const updateProfile = useCallback(
+    async (payload: UpdateProfilePayload) => {
+      if (!session) {
+        throw new Error('You are not signed in');
+      }
+      const account = await authApi.updateProfile(payload, session.accessToken);
+      const next = { ...session, account };
+      await saveSession(next);
+      setSession(next);
+      return account;
+    },
+    [session],
+  );
+
   const signOut = useCallback(async () => {
     if (session) {
       try {
@@ -72,8 +87,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [session]);
 
   const value = useMemo(
-    () => ({ session, initializing, signIn, signUp, activate, signOut }),
-    [session, initializing, signIn, signUp, activate, signOut],
+    () => ({ session, initializing, signIn, signUp, activate, updateProfile, signOut }),
+    [session, initializing, signIn, signUp, activate, updateProfile, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

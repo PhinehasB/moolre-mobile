@@ -3,7 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Fonts } from '@/constants/theme';
-import { moneyWhole } from '@/lib/format';
+import { money } from '@/lib/format';
 
 export default function SentSuccessScreen() {
   const router = useRouter();
@@ -20,7 +20,7 @@ export default function SentSuccessScreen() {
         </View>
         <Text style={styles.title}>Sent successfully</Text>
         <Text style={styles.message}>
-          GHS {moneyWhole(amount)} is on its way to {recipient} on {network}. We&apos;ve texted you a receipt.
+          GHS {money(amount)} is on its way to {recipient} on {network}. We&apos;ve texted you a receipt.
         </Text>
 
         <View style={styles.actions}>

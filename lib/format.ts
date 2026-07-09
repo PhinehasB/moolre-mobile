@@ -7,10 +7,6 @@ export function money(amount: number) {
   return `${group(whole)}.${decimals}`;
 }
 
-export function moneyWhole(amount: number) {
-  return group(String(Math.round(amount)));
-}
-
 function round2(value: number) {
   return Math.round(value * 100) / 100;
 }

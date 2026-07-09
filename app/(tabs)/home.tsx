@@ -190,7 +190,7 @@ export default function HomeScreen() {
                   <Text style={styles.salaryTitle}>Salary from {data.nextSalary.sourceName}</Text>
                   <Text style={styles.salarySub}>
                     Expected in {data.nextSalary.daysUntil} days · {data.wallet.currency}{' '}
-                    {group(String(Math.round(data.nextSalary.amount)))}
+                    {money(data.nextSalary.amount)}
                   </Text>
                   <View style={styles.progressTrack}>
                     <View style={[styles.progressFill, { width: `${Math.round(data.nextSalary.progress * 100)}%` }]} />
@@ -263,7 +263,7 @@ function BillRow({ bill, currency }: { bill: HomeBill; currency: string }) {
       </View>
       <View style={styles.billRight}>
         <Text style={styles.billAmount}>
-          {currency} {group(String(Math.round(bill.amount)))}
+          {currency} {money(bill.amount)}
         </Text>
         {bill.locked ? <Text style={styles.lockedBadge}>Locked</Text> : null}
       </View>
