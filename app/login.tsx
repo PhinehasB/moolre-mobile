@@ -17,6 +17,7 @@ import { TextField } from '@/components/TextField';
 import { Colors, Fonts } from '@/constants/theme';
 import { ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
+import { openWhatsAppSupport } from '@/lib/support';
 
 const logo = require('@/assets/images/klare-logo-green.png');
 const handshake = require('@/assets/images/help-handshake.png');
@@ -126,7 +127,9 @@ export default function LoginScreen() {
             <Text style={styles.helpText}>Need help?</Text>
             <View style={styles.helpIcons}>
               <Image source={handshake} style={styles.handshake} contentFit="contain" />
-              <Image source={whatsapp} style={styles.whatsapp} contentFit="contain" />
+              <Pressable onPress={() => openWhatsAppSupport()} hitSlop={10}>
+                <Image source={whatsapp} style={styles.whatsapp} contentFit="contain" />
+              </Pressable>
             </View>
           </View>
         </ScrollView>
